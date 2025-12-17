@@ -1,0 +1,118 @@
+# Backend Mocks API – Entrega
+
+Proyecto backend desarrollado en Node.js utilizando Express y MongoDB, orientado a la generación de datos mock (usuarios y mascotas) mediante Faker. El objetivo del proyecto es cumplir con la consigna de la entrega, implementando endpoints de mocking y generación de datos persistidos en base de datos.
+
+## Tecnologías utilizadas
+
+* Node.js
+* Express
+* MongoDB Atlas
+* Mongoose
+* @faker-js/faker
+* dotenv
+* bcrypt
+
+## Estructura del proyecto
+
+```text
+├── app.js
+├── config
+│   └── config.js
+├── database
+│   └── mongo.js
+├── mocks
+│   ├── pets.mock.js
+│   └── user.mock.js
+├── models
+│   ├── pet.model.js
+│   └── user.model.js
+├── routes
+│   ├── mocks.router.js
+│   ├── pets.router.js
+│   └── users.router.js
+├── package.json
+└── package-lock.json
+```
+
+## Instalación
+
+Clonar el repositorio e instalar las dependencias:
+
+```bash
+npm install
+```
+
+## Variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto con la siguiente configuración:
+
+```env
+PORT=3000
+MONGO_URL=mongodb+srv://<usuario>:<password>@<cluster>/<database>
+MOCK_PASSWORD=coder123
+```
+
+## Ejecución del proyecto
+
+Para levantar el servidor en modo desarrollo:
+
+```bash
+npm run dev
+```
+
+El servidor se iniciará en el puerto definido en el archivo `.env`.
+
+## Endpoints disponibles
+
+### Mocking
+
+* `GET /api/mocks/test`
+
+  Endpoint de prueba para verificar el correcto funcionamiento del módulo de mocks.
+
+* `GET /api/mocks/users`
+
+  Genera y devuelve 50 usuarios mock. Todos los usuarios incluyen:
+
+  * `_id` con formato MongoDB
+  * nombre y apellido
+  * email generado a partir del nombre y apellido
+  * password hasheada (valor base tomado desde `.env`)
+  * rol asignado aleatoriamente
+
+* `GET /api/mocks/pets`
+
+  Genera y devuelve mascotas mock sin persistir en la base de datos.
+
+### Persistencia
+
+* `POST /api/generateData`
+
+  Genera y guarda en MongoDB la cantidad de usuarios y mascotas indicada.
+
+  Ejemplo de body esperado:
+
+  ```json
+  {
+    "users": 10,
+    "pets": 20
+  }
+  ```
+
+* `GET /api/users`
+
+  Devuelve los usuarios almacenados en la base de datos.
+
+* `GET /api/pets`
+
+  Devuelve las mascotas almacenadas en la base de datos.
+
+## Base de datos
+
+La conexión a MongoDB se realiza mediante MongoDB Atlas y Mongoose. La configuración de la conexión se encuentra centralizada en el archivo `database/mongo.js`.
+
+## Notas finales
+
+* El password de los usuarios mock se encripta utilizando bcrypt.
+* El valor base del password se define por variable de entorno para facilitar escalabilidad y buenas prácticas.
+* El proyecto respeta una estructura modular separando configuración, rutas, modelos, mocks y conexión a base de datos.
