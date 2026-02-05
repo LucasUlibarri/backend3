@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AdoptionModel } from "../dao/models/adoption.model";
+import { AdoptionModel } from "../dao/models/adoption.model.js";
 
 const router = Router();
 
