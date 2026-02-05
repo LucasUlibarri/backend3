@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { UserModel } from "../models/user.model.js";
+import { PetModel } from "../dao/models/pet.model.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const users =  await UserModel.find();
-    res.json({ users });
+    const pets =  await PetModel.find();
+    res.json({ pets });
 })
 
 export default router;

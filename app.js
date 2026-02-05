@@ -14,7 +14,7 @@ connectMongo();
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-  res.send('Backend 3 - Entrega 1')
+  res.send('Backend 3 - Entrega Final')
 })
 
 app.use("/api/users", userRouter);
