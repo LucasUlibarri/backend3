@@ -1,4 +1,4 @@
-import PetModel from "./models/pet.model";
+import { PetModel } from "./models/pet.model.js";
 
 export default class Pet {
 

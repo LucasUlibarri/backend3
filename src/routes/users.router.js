@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { UserModel } from "../dao/models/user.model.js";
+import userControllers from "../controllers/user.controller.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-    const users =  await UserModel.find();
-    res.json({ users });
-})
+router.get('/', userControllers.getAllUsers);
+router.get('/:uid', userControllers.getUser);
+router.put('/:uid', userControllers.updateUser);
+router.delete('/:uid', userControllers.deleteUser);
 
 export default router;

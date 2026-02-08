@@ -1,16 +1,10 @@
 import { Router } from "express";
-import { AdoptionModel } from "../dao/models/adoption.model.js";
+import adoptionsController from "../controllers/adoptions.controller.js";
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-    const adoptions = await AdoptionModel.find();
-    res.json(adoptions);
-});
-
-router.post('/', async (req, res) => {
-    const adoption = await AdoptionModel.create(req.body);
-    res.status(201).json(adoption);
-});
+router.get('/', adoptionsController.getAllAdoptions);
+router.get('/:aid', adoptionsController.getAdoption);
+router.post('/:uid/:pid', adoptionsController.createAdoption);
 
 export default router;

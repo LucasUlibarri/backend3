@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { PetModel } from "../dao/models/pet.model.js";
+import petsController from "../controllers/pets.controller.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-    const pets =  await PetModel.find();
-    res.json({ pets });
-})
+router.get('/', petsController.getAllPets);
+router.get('/:pid', petsController.getPetById);
+router.post('/', petsController.createPet);
+router.put('/:pid', petsController.updatePet);
+router.delete('/:pid', petsController.deletePet);
 
 export default router;
