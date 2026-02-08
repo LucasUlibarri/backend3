@@ -1,0 +1,188 @@
+xopenapi: 3.0.1
+
+info:
+  title: API de Usuarios
+  description: >
+    Documentación del módulo de usuarios del proyecto AdoptMe.
+    Este archivo documenta las rutas definidas en users.router.js
+  version: 1.0.0
+
+# DEFINICIÓN DE TODAS LAS RUTAS DEL MÓDULO USERS
+paths:
+
+  # RUTA BASE /api/users
+  # CORRESPONDE A router.get('/')
+  /api/users:
+    get:
+      summary: Obtener todos los usuarios
+      description: Retorna la lista completa de usuarios almacenados en la base de datos
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+
+  # RUTA CON PARÁMETRO DINÁMICO /api/users/:uid
+  /api/users/{uid}:
+
+    # GET /api/users/:uid
+    get:
+      summary: Obtener un usuario por ID
+      description: Busca un usuario específico utilizando su ID de MongoDB
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a buscar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario encontrado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: "#/components/schemas/User"
+        "404":
+          description: Usuario no encontrado
+
+    # PUT /api/users/:uid
+    put:
+      summary: Actualizar un usuario
+      description: Permite modificar los datos de un usuario existente
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Datos que se desean actualizar del usuario
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Usuario actualizado
+        "400":
+          description: Datos inválidos o incompletos
+        "404":
+          description: Usuario no encontrado
+
+    # DELETE /api/users/:uid
+    delete:
+      summary: Eliminar un usuario
+      description: Elimina un usuario de la base de datos según su ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Usuario eliminado
+        "404":
+          description: Usuario no encontrado
+
+# DEFINICIÓN DE ESQUEMAS UTILIZADOS EN LAS RESPUESTAS
+components:
+  schemas:
+
+    # ESQUEMA DE USUARIO COMPLETO
+    # REPRESENTA LA ESTRUCTURA REAL DEVUELTA POR MONGO
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del usuario generado por MongoDB
+          example: 64f1c2a9c9e77b001234abcd
+        first_name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        email:
+          type: string
+          example: juan.perez@mail.com
+        role:
+          type: string
+          description: Rol del usuario dentro del sistema
+          example: user
+        pets:
+          type: array
+          description: Lista de IDs de mascotas asociadas al usuario
+          items:
+            type: string
+
+    # ESQUEMA PARA ACTUALIZACIÓN DE USUARIO
+    # SE USA EN EL PUT /api/users/:uid
+    UserUpdate:
+      type: object
+      description: Campos permitidos para actualizar un usuario
+      properties:
+        first_name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        role:
+          type: string
+          example: admin
+        pets:
+          type: array
+          items:
+            type: string
