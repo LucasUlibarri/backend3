@@ -1,0 +1,17 @@
+openapi: 3.0.1
+
+info:
+  title: AdoptMe API
+  description: Documentación general de la API del proyecto AdoptMe
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  $ref: "./Users/users.yaml#/paths"
+
+tags:
+  - name: Users
+    description: Operaciones relacionadas con usuarios

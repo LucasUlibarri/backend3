@@ -17,17 +17,17 @@ const createAdoption = async (req, res) => {
     const user = await usersService.getUserById(uid);
     if(!user) return res.status(404).send({status: "error", message: "Usuario no encontrado"});
 
-    const pet = await petsService.getPetBy({_id:pid});
+    const pet = await petsService.getBy({_id:pid});
     if(!pet) return res.status(404).send({status: "error", message: "Mascota no encontrada"});
 
     if(pet.adopted) return res.status(400).send({status: "error", message: "Mascota ya adoptada"});
 
     user.pets.push(pet._id);
     await usersService.update(user._id, {pets: user.pets});
-    await petsService.update(pet._id, {adopted: true, owner: user._id});
-    await adoptionService.create({owner: user._id, pet: pet._id});
+    await petsService.update(pet._id, {adopted: true, user: user._id});
+    await adoptionService.create({user: user._id, pet: pet._id});
 
-    res.send({status: "success", message: "Mascota adoptada!"})
+    res.status(201).send({status: "success", message: "Mascota adoptada!"})
 }
 
 export default {

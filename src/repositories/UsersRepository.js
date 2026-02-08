@@ -10,6 +10,6 @@ export default class AdoptionRepository extends GenericRepository {
     }
 
     getUserById = async (id) => {
-        return await this.getById({_id: id});
+        return await this.getBy({_id: id});
     }
 }
