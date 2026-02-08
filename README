@@ -1,118 +1,184 @@
-# Backend Mocks API – Entrega
+# AdoptMe Backend API – Entrega Final Backend III
 
-Proyecto backend desarrollado en Node.js utilizando Express y MongoDB, orientado a la generación de datos mock (usuarios y mascotas) mediante Faker. El objetivo del proyecto es cumplir con la consigna de la entrega, implementando endpoints de mocking y generación de datos persistidos en base de datos.
+Proyecto backend desarrollado en Node.js utilizando Express y MongoDB, adaptado al formato del proyecto AdoptMe visto en clase.  
+El objetivo de esta entrega es implementar una API REST completa con arquitectura por capas, documentación con Swagger (YAML), tests de integración y configuración con Docker.
+
+---
 
 ## Tecnologías utilizadas
 
-* Node.js
-* Express
-* MongoDB Atlas
-* Mongoose
-* @faker-js/faker
-* dotenv
-* bcrypt
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- dotenv
+- bcrypt
+- Swagger UI Express
+- YAML
+- Mocha
+- Chai
+- Supertest
+- Docker
+
+---
 
 ## Estructura del proyecto
 
-```text
-├── app.js
-├── config
-│   └── config.js
-├── database
-│   └── mongo.js
-├── mocks
-│   ├── pets.mock.js
-│   └── user.mock.js
-├── models
-│   ├── pet.model.js
-│   └── user.model.js
-├── routes
-│   ├── mocks.router.js
-│   ├── pets.router.js
-│   └── users.router.js
-├── package.json
-└── package-lock.json
-```
+.
+├── app.js  
+├── Dockerfile  
+├── README  
+├── package.json  
+├── package-lock.json  
+├── .env  
+├── src  
+│   ├── config  
+│   │   └── config.js  
+│   ├── controllers  
+│   │   ├── adoptions.controller.js  
+│   │   ├── pets.controller.js  
+│   │   ├── sessions.controller.js  
+│   │   └── user.controller.js  
+│   ├── dao  
+│   │   ├── Adoption.js  
+│   │   ├── Pets.dao.js  
+│   │   ├── Users.dao.js  
+│   │   └── models  
+│   │       ├── adoption.model.js  
+│   │       ├── pet.model.js  
+│   │       └── user.model.js  
+│   ├── database  
+│   │   └── mongo.js  
+│   ├── docs  
+│   │   ├── swagger.yaml  
+│   │   └── Users  
+│   │       └── users.yaml  
+│   ├── dto  
+│   │   ├── Pet.dto.js  
+│   │   └── User.dto.js  
+│   ├── mocks  
+│   │   ├── pets.mock.js  
+│   │   └── user.mock.js  
+│   ├── repositories  
+│   │   ├── AdoptionRepository.js  
+│   │   ├── GenericRepository.js  
+│   │   ├── PetRepository.js  
+│   │   └── UsersRepository.js  
+│   ├── routes  
+│   │   ├── adoption.router.js  
+│   │   ├── mocks.router.js  
+│   │   ├── pets.router.js  
+│   │   └── users.router.js  
+│   ├── services  
+│   │   └── index.js  
+│   └── utils  
+│       └── index.js  
+└── test  
+    └── adoption.test.js  
+
+---
 
 ## Instalación
 
-Clonar el repositorio e instalar las dependencias:
-
-```bash
 npm install
-```
+
+---
 
 ## Variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto con la siguiente configuración:
-
-```env
-PORT=3000
+PORT=8080  
 MONGO_URL=mongodb+srv://<usuario>:<password>@<cluster>/<database>
-MOCK_PASSWORD=coder123
-```
+
+---
 
 ## Ejecución del proyecto
 
-Para levantar el servidor en modo desarrollo:
-
-```bash
 npm run dev
-```
 
-El servidor se iniciará en el puerto definido en el archivo `.env`.
+Servidor disponible en http://localhost:8080
 
-## Endpoints disponibles
+---
 
-### Mocking
+## Endpoints
 
-* `GET /api/mocks/test`
+### Users
+- GET /api/users  
+- GET /api/users/:uid  
+- PUT /api/users/:uid  
+- DELETE /api/users/:uid  
 
-  Endpoint de prueba para verificar el correcto funcionamiento del módulo de mocks.
+### Pets
+- GET /api/pets  
+- POST /api/pets  
+- PUT /api/pets/:pid  
+- DELETE /api/pets/:pid  
 
-* `GET /api/mocks/users`
+### Adoptions
+- GET /api/adoptions  
+- GET /api/adoptions/:aid  
+- POST /api/adoptions/:uid/:pid  
 
-  Genera y devuelve 50 usuarios mock. Todos los usuarios incluyen:
+### Mocks
+- GET /api/mocks/test  
+- GET /api/mocks/mockingusers  
+- GET /api/mocks/mockingpets  
+- POST /api/mocks/generateData  
 
-  * `_id` con formato MongoDB
-  * nombre y apellido
-  * email generado a partir del nombre y apellido
-  * password hasheada (valor base tomado desde `.env`)
-  * rol asignado aleatoriamente
+Body de ejemplo:
 
-* `GET /api/mocks/pets`
+{
+  "users": 10,
+  "pets": 20
+}
 
-  Genera y devuelve mascotas mock sin persistir en la base de datos.
+---
 
-### Persistencia
+## Swagger
 
-* `POST /api/generateData`
+La API está documentada usando Swagger con archivos YAML.
 
-  Genera y guarda en MongoDB la cantidad de usuarios y mascotas indicada.
+Ruta de acceso:  
+http://localhost:8080/api/docs
 
-  Ejemplo de body esperado:
+Archivos:
+- src/docs/swagger.yaml  
+- src/docs/Users/users.yaml  
 
-  ```json
-  {
-    "users": 10,
-    "pets": 20
-  }
-  ```
+---
 
-* `GET /api/users`
+## Tests
 
-  Devuelve los usuarios almacenados en la base de datos.
+Tests de integración implementados con Mocha, Chai y Supertest.
 
-* `GET /api/pets`
+Ubicación:
+test/adoption.test.js
 
-  Devuelve las mascotas almacenadas en la base de datos.
+Ejecución:
+npm test
 
-## Base de datos
+Se testean:
+- GET /api/adoptions  
+- GET /api/adoptions/:aid  
+- POST /api/adoptions/:uid/:pid  
 
-La conexión a MongoDB se realiza mediante MongoDB Atlas y Mongoose. La configuración de la conexión se encuentra centralizada en el archivo `database/mongo.js`.
+---
+
+## Docker
+
+El proyecto incluye Dockerfile.
+
+Build:
+docker build -t adoptme-backend .
+
+Run:
+docker run -p 8080:8080 adoptme-backend
+
+---
 
 ## Notas finales
 
-* El password de los usuarios mock se encripta utilizando bcrypt.
-* El valor base del password se define por variable de entorno para facilitar escalabilidad y buenas prácticas.
-* El proyecto respeta una estructura modular separando configuración, rutas, modelos, mocks y conexión a base de datos.
+- El proyecto fue adaptado para cumplir con el formato y arquitectura de AdoptMe.
+- Se implementó arquitectura por capas.
+- Se agregó documentación Swagger en YAML.
+- Se incluyeron tests de integración.
+- Se agregó Dockerfile para contenerización.
